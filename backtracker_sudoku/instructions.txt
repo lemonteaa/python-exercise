@@ -1,0 +1,104 @@
+(Easy) 1. Consider the following code, that declares a RootedTree data structure:
+
+class RootedTree:
+    def __init__(self, value, children):
+        self.value = value
+        self.children = children
+
+Here, value is the root node's data, while children is a sequence of the subtrees, each of type RootedTree. For leaf node, children is None. (Python's null object) Note that the number of subtrees can be variable.
+
+a) Write a function, DFS(tree, l), that perform a depth-first search of tree (type RootedTree), inserting values of each node visited to the sequence l in the order visited.
+b) (Optional) do part a without using recursion. (Hint: emulate the function call stack. The tricky part is to encode the point in code when the recursive call is invoked. You may also want to exploit Python's dynamic feature - not every data structure have to be implemented as a class, use a map instead for flexibility)
+
+For testing, you may use the following test data:
+a = RootedTree(4, None)
+b = RootedTree(8, [RootedTree(2, None), RootedTree(11, None)])
+r = RootedTree(7, [a, b])
+
+(Medium+) 2. Sometimes, the tree is too large for it to be stored in memory. One way to work around this limitation is to use a lazy data structure. Since Python does not support this directly in the language, we have to implement this ourselves.
+
+Let S be an abstract state space, and let all values of the nodes in our tree be elements in S. Moreover, suppose that no two nodes have the same value. Instead of storing the whole tree, we are given a function trans: S -> Seq[S] that, given a node's value, return a sequence of child nodes of this node, where each child node is represented by its value alone.
+
+a) i. Write a class called BackTracker with the following methods:
+
+class BackTracker:
+    def __init__(self, init_state, trans):
+		# TODO
+	
+	def cur_state(self):
+		# TODO
+		return None
+	
+	def next_state(self):
+		# TODO
+		return None
+
+where init_state is the root node of the tree. This class should implement DFS over the tree implied by the function trans, with an iterable like interface. That is, at any point, calling cur_state should return the current node we are in (represented by the node's value only), while calling next_state will let the class "visit" the next state according to the DFS algorithm. If the class has finished visiting all states, cur_state should return None.
+(Hint: this is simply 1b repeated with a new data structure and new interface)
+
+ii. Analyze the space and time complexity of your implementation in 2a i. Justify your tradeoffs if any.
+
+b) Implement a function bt_search(init_state, trans, isSuccess), that performs a DFS over the rooted tree implied by init_state and trans. The function isSuccess: S -> Boolean return, for any node, a boolean that indicates whether the node is the one we are searching for. The function bt_search should return the first node's value s, such that isSuccess(s) is true. In case such node does not exists, return None.
+
+For testing, we use a full binary tree, where each node is labeled by integers from top to bottom (in terms of height), and then from left to right for nodes with the same height. Define global variables h (height of the tree) and accList (a list of integer whose node we accept), and then define these test functions:
+
+def binTreeNext(n):
+    if n >= 2**h:
+        return None
+    return [2*n, 2*n + 1]
+
+def isAccept(n):
+	return n in accList
+
+Change the values of accList and run bt_search to see if it returns the expected results.
+
+(Medium) 3. The Sudoku puzzle can be solved as an instance of a state space search problem, using the algorithm we have built in 2. As a first attempt, it appears reasonable to model S as the set of all partially filled Sudoku board not violating any rules of the puzzle (i.e. constraints), and to search for states that are completely filled.
+
+a) i. This model works but is inefficient. Explain why.
+ii. Give an efficient model of this problem. Describe S, the transition function and the acceptance function verbally.
+
+b) i. Design (but not yet implement) a class to represent the state of the Sudoku puzzle:
+
+class SudokuState:
+	def __init__(self, board):
+		# TODO
+	
+	def genNext(self):
+		# TODO
+		return None
+
+where board should be some representation of the initial board, and genNext should return a list of "possible next states" when our object is the current state. Each of these "possible next state" should be an object of class SudokuState. Determine what attributes this class should have, and add additional helper methods in this class as needed. (Hint: use the function deepcopy to make new, independent copies of the current object)
+
+ii. The board itself may be represented either as a two dimensional array through nested list:
+[[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+(Demostrating a 3 by 3 cell)
+or as a flattened, one dimensional array:
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+Discuss the pros and cons of each representation in terms of implementing the design in 3b i.
+iii. Implement the design of 3b, and use it, together with bt_search in 2, to solve the Sudoku puzzle.
+
+To test your implementation, simply find any sample Sudoku puzzle, run the solver, then check the completed board manually.
+
+c) (Optional) Add input and output functionality to your program. Hint: it is possible to write formatting and parsing functions generically for n^2 by n^2 board, however it may makes for a more readable program to simply "hardcode" the cannonical format, foregoing generalizations. For example, assuming the board is represented by a flattened array named answer, we can display it with the following code:
+
+sudokuBoardTemplate = "\n".join(["   |   |   ",
+"   |   |   ",
+"   |   |   ",
+"---+---+---",
+"   |   |   ",
+"   |   |   ",
+"   |   |   ",
+"---+---+---",
+"   |   |   ",
+"   |   |   ",
+"   |   |   "])
+j = 0
+display = list(sudokuBoardTemplate)
+for i, c in enumerate(display):
+	if c is ' ':
+		display[i] = str(answer[j])
+		j = j + 1
+
+print("".join(display))
+
+(Easy+) 4. (Optional) As it turns out, other puzzles can also be solved with essentially the same algorithm. A classic example is the eight queen problem. Research its description on the web, and imeplement a solver similar to 3.
