@@ -1,0 +1,22 @@
+Important Note: This exercise is inspired by Ruslan's "Let's Build A Web Server" series as a kind of follow up. As we will be using online resources to help, please read the reference section at the end first before beginning the exercise.
+
+(Easy to Medium depending on how serious you get)
+0. First we want to refine some aspect of the codes in the blog series to make further development on top of them more pleasant to work with.
+
+a) You may come across problem when trying to test part 1 using telnet in window. It turns out that telnet may decide to send packets as it receives characters you type, rather than sending them all at once. Since the function client_connection.recv(1024) means trying to get "something" with an upper bound of fetching 1024 bytes at most, you may get cut off after entering a single character. What we really need is some sort of protocol coupled with a stream interface - we should be persistantly reading until we know enough about the beginning part of the content sent to know the actual length of the whole payload - in this case it is the 'Content-Length' http header field that will tell us.
+
+Extract suitable function from part 2's code to help with parsing the packet's content, and then write a code snippet to properly read the packet and insert it into the code in part 1. (Hint: use the readline and read function)
+
+b) Add logging to the code so that we can debug more easily. After importing logging, add the line
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format='%(asctime)s [%(levelname)s] %(message)s')
+for a minimal setup, then add log in places you think are important.
+
+Reference:
+
+The original tutorial/DIY series is at https://ruslanspivak.com/lsbaws-part1/ (Part 1, follow links at bottom to get to other parts), and we assume that the reader has already read (but not neccessarily worked out) both part 1 and part 2 throughout this exercise.
+
+We will be working and perhaps tinklering with both HTTP's protocol detail and drill down on WSGI's interface a bit. For http, the authoritative reference is the original spec at https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4 .
+
+Python's standard socket library provide a function socket.makefile to allow accessing socket through a file-like api. However there are some subtlety involved and it have (previously?) some limitations. Nonetheless it is good enough for our exercise. See http://stackoverflow.com/questions/12203800/should-i-close-makefileed-socket-and-it-is-original-socket-independently for hints on how to use it.
+
+One of Python's strength has been in its battery included philosophy while providing an easy, accessible interface and supporting a wide variety of system integration tasks. Logging is taken care of in a similar spirit and it is in fact a built in library. Read https://docs.python.org/2/howto/logging.html#logging-basic-tutorial for an introduction.
