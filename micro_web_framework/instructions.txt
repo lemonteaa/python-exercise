@@ -17,6 +17,27 @@ ii. Write functions to extract all http headers and add them to the environ dict
 
 (Optional) d) Study using multiprocessing to make a httpd daemon so that starting/stopping server is less tedious.
 
+
+1. A Web Framework provides its own model of how things work, as well as a more convenient and/or more powerful interface to the user than the actual interface to the web server (which in this case is the WSGI). They achieve this by layering on top of the basic interface, doing some of the tasks that can be generalized. We will build a heavily simplified micro web framework incrementally, starting with miscellaneous functions.
+
+a) The first issue is that the data structure in WSGI is too low-level with everything packed in one single env dict - we want to present the data in a cleaner way that is also more meaningful from a user's point of view.
+
+Let's create a class named HttpReq (Shortform for HTTP Request) that is just data structure:
+
+class HttpReq:
+	pass
+
+It should have the following attributes:
+url: The URL being requested.
+method: 'GET' or 'POST'
+headers: a python dict whose keys are the header names and the values are the corresponding header values.
+getparams: if request method is 'GET', this should be a python dict of the request parameters whose keys are parameter names and the values are the corresponding parameter values. The value should be a python array if there is a repeat of parameter name.
+postparams: if request method is 'POST', this should be a python dict with the request parameters in the same schema as getparams.
+
+(i) Write a helper function extractHeaders(env) to extract headers from the env dict according to the requirement for the class HttpReq.
+(ii) Write a function get_req(env) to construct and return a HttpReq object from the env dict, conforming to the above specification.
+
+
 Reference:
 
 The original tutorial/DIY series is at https://ruslanspivak.com/lsbaws-part1/ (Part 1, follow links at bottom to get to other parts), and we assume that the reader has already read (but not neccessarily worked out) both part 1 and part 2 throughout this exercise.
