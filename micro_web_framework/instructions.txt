@@ -36,6 +36,7 @@ postparams: if request method is 'POST', this should be a python dict with the r
 
 (i) Write a helper function extractHeaders(env) to extract headers from the env dict according to the requirement for the class HttpReq.
 (ii) Write a function get_req(env) to construct and return a HttpReq object from the env dict, conforming to the above specification.
+Note: You are allowed to use the module urlparse (urllib.parse if using Python 3) in standard library for this question.
 
 
 Reference:
