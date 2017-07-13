@@ -38,6 +38,28 @@ postparams: if request method is 'POST', this should be a python dict with the r
 (ii) Write a function get_req(env) to construct and return a HttpReq object from the env dict, conforming to the above specification.
 Note: You are allowed to use the module urlparse (urllib.parse if using Python 3) in standard library for this question.
 
+b) The second and third (and fourth) issues are that it is still too cumbersome to work directly with HTTP request and response (too much boilerplate code to extract data from request object manually as well as assembly/building response object), and for larger projects with many 'pages' located at various URL, doing everything in one function is confusing and difficult to manage (try searching through/jumping around the code!). Different frameworks may use different mechanisms, but some common ideas are:
+- Use handler that focus on dealing with requests on one particular (or one family of) resource.
+- Inject various kinds of parameters into the handler, and only require the handler to return the core content of the response (or return an abstracted response object)
+- Some frameworks will also allow automatic configuration of the web application itselfs to varying degree.
+
+In this exercise, we will implement a 'router' in the framework (explained in question 2 below), use dependency injection-like method to provide the parameters, and use decorator for auto-config (a similar thing is called annotation-driven config in Java).
+
+Implement a decorator called 'route' that is applied to methods (which is a kind of callable in python) acting as handler. The decorator should have the following arguments:
+url (mandatory): for which URL will this handler be able to process the request?
+method (optional): any restriction on request type? 'GET' if handler only deals with GET request, 'POST' for 'POST' request only, and 'ANY' for no restriction. Defaults to 'ANY'.
+
+It should wrap the method and apply dependency injection by inspecting the method argument names and providing the corresponding request parameters (using None as value if it doesn't exist).
+
+As an example:
+
+class TodoApp:
+	@route('/todo/create', method='POST')
+	def addTodoListItem(self, task, pos):
+		# ...snip...
+
+Here the route's URL is '/todo/create', the method is 'POST', and the decorator should extract request parameters 'task' and 'pos' if they exists.
+
 
 Reference:
 
