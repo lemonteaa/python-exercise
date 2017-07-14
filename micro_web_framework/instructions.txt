@@ -61,6 +61,24 @@ class TodoApp:
 Here the route's URL is '/todo/create', the method is 'POST', and the decorator should extract request parameters 'task' and 'pos' if they exists.
 
 
+2. A router is something that route a request to a suitable handler for further processing. The handlers are matched/tested against the request by examining its HTTP method and URL, and in more advanced cases patterns/regex can be used when matching URL (which we won't do here). Usually a map/registry of handlers are internally recorded and used for matching.
+
+a) In older generations of web framework the user is responsible for providing/configuring the handler map manually/explicitly, for example by calling a function with the full handler map as argument, or by calling a register function for each handler/route. Newer generation can be auto-config as mentioned in Q1 above.
+(i) Write a function buildHandlerMap(clz), that accept a class meta-object as argument, extract all handlers inside that class (i.e. methods in the class decorated with 'route'), and return the handler map. The map should be a list of 4-tuple with format (<method name>, <URL in route decorator>, <method in route decorator>, <the handler callable>).
+(Hint: modify your code in Q1 b to add suitable attributes to the callable, so that the meta-data stored in the decorator itself can be inspected)
+(ii) Write a function dispatchReq(handlerMap, req), that when given the handler map built from Q2 a(i), and a HttpReq object, will perform the routing as described above. It should call the first handler in the list that matches successfully with req supplied as argument, and then return the result of that call, or raise an Exception with message 'No route found' otherwise.
+
+b) We are now finally ready to write the 'main function' of our framework. Finish the following code snippet:
+
+class microFrame:
+	def __init__(self, clz):
+		self.handlerMap = buildHandlerMap(clz)
+	
+	def app(self, env, start_response):
+		# TODO
+
+
+
 Reference:
 
 The original tutorial/DIY series is at https://ruslanspivak.com/lsbaws-part1/ (Part 1, follow links at bottom to get to other parts), and we assume that the reader has already read (but not neccessarily worked out) both part 1 and part 2 throughout this exercise.
