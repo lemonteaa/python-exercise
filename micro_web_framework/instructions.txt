@@ -20,7 +20,7 @@ ii. Write functions to extract all http headers and add them to the environ dict
 
 1. A Web Framework provides its own model of how things work, as well as a more convenient and/or more powerful interface to the user than the actual interface to the web server (which in this case is the WSGI). They achieve this by layering on top of the basic interface, doing some of the tasks that can be generalized. We will build a heavily simplified micro web framework incrementally, starting with miscellaneous functions.
 
-a) The first issue is that the data structure in WSGI is too low-level with everything packed in one single env dict - we want to present the data in a cleaner way that is also more meaningful from a user's point of view.
+(Easy) a) The first issue is that the data structure in WSGI is too low-level with everything packed in one single env dict - we want to present the data in a cleaner way that is also more meaningful from a user's point of view.
 
 Let's create a class named HttpReq (Shortform for HTTP Request) that is just data structure:
 
@@ -38,7 +38,7 @@ postparams: if request method is 'POST', this should be a python dict with the r
 (ii) Write a function get_req(env) to construct and return a HttpReq object from the env dict, conforming to the above specification.
 Note: You are allowed to use the module urlparse (urllib.parse if using Python 3) in standard library for this question.
 
-b) The second and third (and fourth) issues are that it is still too cumbersome to work directly with HTTP request and response (too much boilerplate code to extract data from request object manually as well as assembly/building response object), and for larger projects with many 'pages' located at various URL, doing everything in one function is confusing and difficult to manage (try searching through/jumping around the code!). Different frameworks may use different mechanisms, but some common ideas are:
+(Hard) b) The second and third (and fourth) issues are that it is still too cumbersome to work directly with HTTP request and response (too much boilerplate code to extract data from request object manually as well as assembly/building response object), and for larger projects with many 'pages' located at various URL, doing everything in one function is confusing and difficult to manage (try searching through/jumping around the code!). Different frameworks may use different mechanisms, but some common ideas are:
 - Use handler that focus on dealing with requests on one particular (or one family of) resource.
 - Inject various kinds of parameters into the handler, and only require the handler to return the core content of the response (or return an abstracted response object)
 - Some frameworks will also allow automatic configuration of the web application itselfs to varying degree.
@@ -63,12 +63,12 @@ Here the route's URL is '/todo/create', the method is 'POST', and the decorator 
 
 2. A router is something that route a request to a suitable handler for further processing. The handlers are matched/tested against the request by examining its HTTP method and URL, and in more advanced cases patterns/regex can be used when matching URL (which we won't do here). Usually a map/registry of handlers are internally recorded and used for matching.
 
-a) In older generations of web framework the user is responsible for providing/configuring the handler map manually/explicitly, for example by calling a function with the full handler map as argument, or by calling a register function for each handler/route. Newer generation can be auto-config as mentioned in Q1 above.
+(Easy+) a) In older generations of web framework the user is responsible for providing/configuring the handler map manually/explicitly, for example by calling a function with the full handler map as argument, or by calling a register function for each handler/route. Newer generation can be auto-config as mentioned in Q1 above.
 (i) Write a function buildHandlerMap(clz), that accept a class meta-object as argument, extract all handlers inside that class (i.e. methods in the class decorated with 'route'), and return the handler map. The map should be a list of 4-tuple with format (<method name>, <URL in route decorator>, <method in route decorator>, <the handler callable>).
 (Hint: modify your code in Q1 b to add suitable attributes to the callable, so that the meta-data stored in the decorator itself can be inspected)
 (ii) Write a function dispatchReq(handlerMap, req), that when given the handler map built from Q2 a(i), and a HttpReq object, will perform the routing as described above. It should call the first handler in the list that matches successfully with req supplied as argument, and then return the result of that call, or raise an Exception with message 'No route found' otherwise.
 
-b) We are now finally ready to write the 'main function' of our framework. Finish the following code snippet:
+(Medium) b) We are now finally ready to write the 'main function' of our framework. Finish the following code snippet:
 
 class microFrame:
 	def __init__(self, clz):
