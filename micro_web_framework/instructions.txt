@@ -77,6 +77,21 @@ class microFrame:
 	def app(self, env, start_response):
 		# TODO
 
+(Easy+) c) (i) Now test the framework you've just written by writting an example web application. Your test should include at least one route each for:
+
+- Returning a html form to submit
+- A page accepting query parameter called through GET
+- A page that accept form submit through POST
+
+You may optionally test for default argument in function in Python.
+(ii) Test drive your web application. Open an interactive Python session, and type suitable command to package a web application, "deploy" it to the custom web server (after enhancements in question 0), and start the server. Open your browser and tests that it behaves as expected.
+
+
+(Optional)
+3. In this question we try to extend our web framework to support more functionality. We will provide only the goal - you are free to come up with your own idea! (See reference section for explanation, supporting materials etc if you get stuck)
+a) Add support for manipulating Cookie.
+b) (i) Based on part a, now implement Session.
+(ii) Can you make your implementation of a and b(i) be thread-safe?
 
 
 Reference:
