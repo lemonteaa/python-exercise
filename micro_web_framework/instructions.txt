@@ -108,3 +108,10 @@ It turns out that you cannot test the simple server in part 2 with chrome becaus
 
 WSGI is an old school interface that still works - similar to the CGI interface at the dawn of web 2.0 one or two decades before. Refer to https://wsgi.readthedocs.io/en/latest/definitions.html for a brief description of the environ keys, and read http://wsgi.tutorial.codepoint.net/ to quickily learn how to work with it practically.
 
+For a concise but still in-depth explanation of the multiprocessing module, see https://pymotw.com/2/multiprocessing/. This website is also useful in general for getting a tour of various Python modules.
+
+Aside from specific pages mentioned above, Python has a good amount of online materials ranging from beginner-level-tutorial to more advanced articles. One example is http://python-guide-pt-br.readthedocs.io/en/latest/. Meanwhile, do not forget that Python's official documentation has reasonable average quality too, so check it out before looking for supplementary materials: https://docs.python.org/2/index.html.
+
+Web framework is a foundational, classical piece of software and as such there has been numerous specific frameworks, in a wide variety of context (e.g. different language) throughout the years. In spite of "recent" innovations such as Ruby On Rails and Express in Node.js (and many new generation, lightweight frameworks emphasizing interactive development), their basic principles remain the same (and so in my opinion belongs to the realm of Computer Science). See https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Web_frameworks for an introduction to what they do.
+
+Decorator is a somewhat tricky feature in Python because it uses higher order function in an essential way, and also because there are different use cases with subtly different syntax. Two blog posts that explain these points are https://www.thecodeship.com/patterns/guide-to-python-function-decorators/ at a beginner level, and http://scottlobdell.me/2015/04/decorators-arguments-python/ that also covers the more advanced cases of using a class as decorator.
